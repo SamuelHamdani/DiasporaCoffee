@@ -1,113 +1,107 @@
-// Menyimpan data produk menggunakan alpine.js
-document.addEventListener('alpine:init', () => {
-    Alpine.data('products', () => ({
-        items: [
-            { id: 1, name: 'Latte', img: 'Latte.jpg', price: 20000},
-            { id: 2, name: 'Black Coffee', img: 'Black Coffee.jpg', price: 25000},
-            { id: 3, name: 'Espresso', img: 'Espresso.jpg', price: 30000},
-            { id: 4, name: 'Iced Coffee', img: 'Iced Coffee.jpg', price: 20000},
-            { id: 5, name: 'Mocha', img: 'Mocha.jpg', price: 25000},
-            { id: 6, name: 'Americano', img: 'Americano.jpg', price: 25000}
-        ],
-    }));
-
-    // Menambahkan fungsi tombol keranjang
-    Alpine.store('cart', {
+document.addEventListener('DOMContentLoaded', () => {
+    const cart = {
         items: [],
         total: 0,
         quantity: 0,
-        add(newItem) {
-            // Cek apakah ada barang yang sama di cart
-            const cartItem = this.items.find((item) => item.id === newItem.id);
+        addItem(newItem) {
+            const cartItem = this.items.find(item => item.name === newItem.name);
 
-            // Jika belum ada / cart masih kosong
-            if(!cartItem) {
-                this.items.push({...newItem, quantity:1, total: newItem.price});
+            if (!cartItem) {
+                this.items.push({ ...newItem, quantity: 1, total: newItem.price });
                 this.quantity++;
                 this.total += newItem.price;
-            }else {
-                // Jika barang sudah ada, cek apakah barang beda atau sama dengan yang ada di cart
-                this.items = this.items.map((item) => {
-                    // Jika barang berbeda
-                    if(item.id !== newItem.id) {
-                        return item;
-                    } else {
-                        // Jika barang sudah ada, tambah quantity dan totalnya
-                        item.quantity++;
-                        item.total = item.price * item.quantity;
-                        this.quantity++;
-                        this.total += item.price;
-                        return item;
-                    }
-                });
+            } else {
+                cartItem.quantity++;
+                cartItem.total = cartItem.price * cartItem.quantity;
+                this.quantity++;
+                this.total += newItem.price;
             }
+            this.updateCart();
         },
-        remove(id) {
-            // Ambil item yang mau diremove berdasarkan id nya
-            const cartItem = this.items.find((item) => item.id === id);
+        removeItem(name) {
+            const cartItem = this.items.find(item => item.name === name);
 
-            // Jika item lebih dari 1
-            if(cartItem.quantity > 1) {
-                // Telusrui Satu satu
-                this.items = this.items.map((item) => {
-                    // Jika bukan barang yang dklik
-                    if(item.id !== id) {
-                        return item;
-                    } else {
-                        item.quantity--;
-                        item.total = item.price * item.quantity;
-                        this.quantity--;
-                        this.total -= item.price;
-                        return item
-                    }
-                })
-            }  else if (cartItem.quantity === 1) {
-                this.items = this.items.filter((item) => item.id !== id);
+            if (cartItem.quantity > 1) {
+                cartItem.quantity--;
+                cartItem.total = cartItem.price * cartItem.quantity;
+                this.quantity--;
+                this.total -= cartItem.price;
+            } else {
+                this.items = this.items.filter(item => item.name !== name);
                 this.quantity--;
                 this.total -= cartItem.price;
             }
+            this.updateCart();
         },
+        updateCart() {
+            const cartItemsContainer = document.getElementById('cart-items');
+            cartItemsContainer.innerHTML = '';
+
+            if (this.items.length === 0) {
+                document.getElementById('cart-empty').style.display = 'block';
+                document.getElementById('cart-total').style.display = 'none';
+                document.getElementById('checkout-form-container').style.display = 'none';
+            } else {
+                document.getElementById('cart-empty').style.display = 'none';
+                document.getElementById('cart-total').style.display = 'block';
+                document.getElementById('checkout-form-container').style.display = 'block';
+
+                this.items.forEach(item => {
+                    const itemElement = document.createElement('div');
+                    itemElement.classList.add('cart-item');
+                    itemElement.innerHTML = `
+                        <img src="${item.img}" alt="${item.name}">
+                        <div class="item-detail">
+                            <h3>${item.name}</h3>
+                            <div class="item-price">
+                                <span>${rupiah(item.price)}</span> &times;
+                                <button class="remove" data-name="${item.name}">&minus;</button>
+                                <span>${item.quantity}</span>
+                                <button class="add" data-name="${item.name}">&plus;</button> &equals;
+                                <span>${rupiah(item.total)}</span>
+                            </div>
+                        </div>
+                    `;
+                    cartItemsContainer.appendChild(itemElement);
+                });
+
+                document.getElementById('cart-total-value').textContent = rupiah(this.total);
+                document.getElementById('hidden-items').value = JSON.stringify(this.items);
+                document.getElementById('hidden-total').value = this.total;
+            }
+        }
+    };
+
+    function rupiah(number) {
+        return 'Rp. ' + number.toLocaleString('id-ID');
+    }
+
+    document.querySelectorAll('.add-to-cart').forEach(button => {
+        button.addEventListener('click', (e) => {
+            e.preventDefault();
+            const productCard = button.closest('.product-card');
+            const newItem = {
+                name: productCard.getAttribute('data-name'),
+                price: parseFloat(productCard.getAttribute('data-price')),
+                img: productCard.getAttribute('data-img')
+            };
+            cart.addItem(newItem);
+        });
     });
 
-    function updateCartDisplay() {
-        // Select your cart DOM elements and update them accordingly
-        const cartItemsContainer = document.querySelector('.shopping-cart .cart-items');
-        const cartTotalElement = document.querySelector('.shopping-cart .total-price');
-        
-        // Clear the current display
-        cartItemsContainer.innerHTML = '';
-        
-        // Rebuild the cart items display
-        cart.items.forEach((item, index) => {
-            const cartItemDiv = document.createElement('div');
-            cartItemDiv.classList.add('cart-item');
-            
-            cartItemDiv.innerHTML = `
-                <img src="img/${item.img}" alt="${item.name}">
-                <div class="item-detail">
-                    <h3>${item.name}</h3>
-                    <div class="item-price">
-                        <span>${rupiah(item.price)}</span> &times;
-                        <button onclick="removeFromCart('${item.name}')">&minus;</button>
-                        <span>${item.quantity}</span>
-                        <button onclick="addToCart('${item.name}', ${item.price})">&plus;</button> &equals;
-                        <span>${rupiah(item.total)}</span>
-                    </div>
-                </div>
-            `;
-            
-            cartItemsContainer.appendChild(cartItemDiv);
-        });
-        
-        // Update total price display
-        cartTotalElement.textContent = `Total : ${rupiah(cart.total)}`;
-    }
-    
-    // Helper function to format price
-    function rupiah(price) {
-        return `Rp. ${price},00`;
-    }
-    
+    document.getElementById('cart-items').addEventListener('click', (e) => {
+        if (e.target.classList.contains('remove')) {
+            const name = e.target.getAttribute('data-name');
+            cart.removeItem(name);
+        } else if (e.target.classList.contains('add')) {
+            const name = e.target.getAttribute('data-name');
+            const item = cart.items.find(item => item.name === name);
+            cart.addItem(item);
+        }
+    });
+
+    // Initial update
+    cart.updateCart();
 });
 
 // Form Validation

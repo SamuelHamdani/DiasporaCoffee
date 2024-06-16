@@ -23,7 +23,7 @@
 
     <!-- Javascript -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <script src="/JS/app.js" async></script>
+    <script src="JS/app.js" async></script>
 </head>
 
 <body>
@@ -61,28 +61,14 @@
 
         <!-- Shopping Cart -->
         <div class="shopping-cart">
-            <template x-for="(item, index) in $store.cart.items" x-keys="index">
-                <div class="cart-item">
-                <img :src="`img/${item.img}`" :alt="item.name">
-                <div class="item-detail">
-                    <h3 x-text="item.name"></h3>
-                    <div class="item-price">
-                        <span x-text="rupiah(item.price)"></span> &times;
-                        <button id="remove" @click="$store.cart.remove(item.id)">&minus;</button>
-                        <span x-text="item.quantity"></span>
-                        <button id="add" @click="$store.cart.add(item)">&plus;</button> &equals;
-                        <span x-text="rupiah(item.total)"></span>
-                    </div>
-                </div>
-                </div>
-            </template>
-            <h4 x-show="!$store.cart.items.length" style="margin-top: 1rem;">Cart Is Empty</h4>
-            <h4 x-show="$store.cart.items.length">Total : <span x-text="rupiah($store.cart.total)"></span></h4>
+            <div id="cart-items"></div>
+            <h4 id="cart-empty" style="margin-top: 1rem;">Cart Is Empty</h4>
+            <h4 id="cart-total" style="display:none;">Total: <span id="cart-total-value"></span></h4>
 
-            <div class="form-container" x-show="$store.cart.items.length">
+            <div class="form-container" id="checkout-form-container" style="display:none;">
                 <form action="" id="checkoutForm">
-                    <input type="hidden" name="items" x-model ="JSON.stringify($store.cart.items)">
-                    <input type="hidden" name="total" x-model ="$store.cart.total">
+                    <input type="hidden" name="items" id="hidden-items">
+                    <input type="hidden" name="total" id="hidden-total">
                     <h5>Customer Detail</h5>
 
                     <label for="name">
@@ -94,8 +80,12 @@
                         <input type="email" name="email" id="email" required>
                     </label>
                     <label for="phone">
-                        <span>Phone</span>
+                        <span>No. Telp</span>
                         <input type="number" name="phone" id="phone" autocomplete="off" required>
+                    </label>
+                    <label for="alamat">
+                        <span>Alamat</span>
+                        <input type="text" name="alamat" id="alamat" autocomplete="off" required>
                     </label>
 
                     <button class="checkout-button" type="submit" id="checkout-button" value="Checkout">Checkout</button>
