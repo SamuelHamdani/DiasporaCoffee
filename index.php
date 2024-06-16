@@ -1,3 +1,8 @@
+<?php
+    require "koneksi.php";
+    $queryProduk = mysqli_query($con, "SELECT id, nama, harga, foto, detail FROM produk");
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -127,110 +132,40 @@
         </div>
     </section>
 
-    <!-- MenU Section -->
-    <section id="menu" class="menu">
-        <h2><span>Menu</span> Kami</h2>
-        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Distinctio ab ullam, accusamus deleniti voluptate
-            ut.</p>
-
-        <div class="row">
-            <div class="menu-card">
-                <img src="img/Kopi (4).jpg" alt="Espresso" class="menu-card-img">
-                <h3 class="menu-card-title">- Espresso -</h3>
-                <p class="menu-card-price">IDR 20K</p>
-            </div>
-            <div class="menu-card">
-                <img src="img/Kopi (4).jpg" alt="Espresso" class="menu-card-img">
-                <h3 class="menu-card-title">- Espresso -</h3>
-                <p class="menu-card-price">IDR 20K</p>
-            </div>
-            <div class="menu-card">
-                <img src="img/Kopi (4).jpg" alt="Espresso" class="menu-card-img">
-                <h3 class="menu-card-title">- Espresso -</h3>
-                <p class="menu-card-price">IDR 20K</p>
-            </div>
-            <div class="menu-card">
-                <img src="img/Kopi (4).jpg" alt="Espresso" class="menu-card-img">
-                <h3 class="menu-card-title">- Espresso -</h3>
-                <p class="menu-card-price">IDR 20K</p>
-            </div>
-            <div class="menu-card">
-                <img src="img/Kopi (4).jpg" alt="Espresso" class="menu-card-img">
-                <h3 class="menu-card-title">- Espresso -</h3>
-                <p class="menu-card-price">IDR 20K</p>
-            </div>
-            <div class="menu-card">
-                <img src="img/Kopi (4).jpg" alt="Espresso" class="menu-card-img">
-                <h3 class="menu-card-title">- Espresso -</h3>
-                <p class="menu-card-price">IDR 20K</p>
-            </div>
-
-        </div>
-    </section>
-
     <!-- Products Section -->
-    <section class="products" id="products" x-data="products">
+    <section class="products" id="products">
         <h2>Our Products</h2>
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Possimus, exercitationem!</p>
 
         <div class="row">
-            <template x-for="(item, index) in items" x-key="index">
+        <?php while($data = mysqli_fetch_array($queryProduk)) { ?>
             <div class="product-card">
                 <div class="product-icon">
-                    <a href="#" @click.prevent="$store.cart.add(item)">
-                        <svg
-                            width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            >
-                            <use href="img/feather-sprite.svg#shopping-cart" />
+                    <!-- Use onclick event to add item to cart -->
+                    <a href="#" onclick="addToCart('<?php echo htmlspecialchars($data['nama']); ?>', <?php echo $data['harga']; ?>)">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <use href="img/feather-sprite.svg#shopping-cart"></use>
                         </svg>
                     </a>
                     <a href="#" class="item-detail-button">
-                        <svg
-                            width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            >
-                            <use href="img/feather-sprite.svg#eye" />
+                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <use href="img/feather-sprite.svg#eye"></use>
                         </svg>
                     </a>
                 </div>
                 <div class="product-image">
-                    <img :src="`img/${item.img}`" :alt="item.name">
+                    <img src="image/<?php echo $data['foto']; ?>" alt="">
                 </div>
                 <div class="product-content">
-                    <h3 x-text="item.name"></h3>
-                    <div class="product-stars">
-                        <svg
-                            width="24" height="24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            >
-                            <use href="img/feather-sprite.svg#star" />
-                        </svg>
-                        <svg
-                            width="24" height="24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            >
-                            <use href="img/feather-sprite.svg#star" />
-                        </svg>
-                        <svg
-                            width="24" height="24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            >
-                            <use href="img/feather-sprite.svg#star" />
-                        </svg>
-                        <svg
-                            width="24" height="24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            >
-                            <use href="img/feather-sprite.svg#star" />
-                        </svg>
-                        <svg
-                            width="24" height="24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            >
-                            <use href="img/feather-sprite.svg#star" />
-                        </svg>
-                    </div>
+                    <h3><?php echo $data['nama']; ?></h3>
+                    <p class="card-text text-truncate"><?php echo $data['detail']; ?></p>
                     <div class="product-price">
-                        <span x-text="rupiah(item.price)"></span>
+                        <span class="card-text text-harga">Rp. <?php echo $data['harga']; ?>,00</span>
                     </div>
                 </div>
             </div>
-        </template>
-        </div>
+        <?php } ?>
+    </div>
     </section>
 
     <!-- Contact Section -->
@@ -242,18 +177,22 @@
             <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d294.73097652866505!2d106.73656382691846!3d-6.340710175057115!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69ef9d2277e4bb%3A0x4d39e187dacc129!2sJl.%20Pamulang%20Permai%207%20Ib%20Blok%20B17%20No.10%2C%20RT.1%2FRW.15%2C%20Pamulang%20Bar.%2C%20Kec.%20Pamulang%2C%20Kota%20Tangerang%20Selatan%2C%20Banten%2015417!5e0!3m2!1sen!2sid!4v1712735803710!5m2!1sen!2sid"
                 class="map" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-            <form action="">
+            <form onsubmit="sendToWhatsApp(event)">
                 <div class="input-group">
                     <i data-feather="user"></i>
-                    <input type="text" name="" id="" placeholder="Nama Anda" required>
+                    <input type="text" name="name" id="contactName" placeholder="Nama Anda" required>
                 </div>
                 <div class="input-group">
                     <i data-feather="mail"></i>
-                    <input type="email" name="" id="" placeholder="Email Anda" required>
+                    <input type="email" name="email" id="contactEmail" placeholder="Email Anda" required>
                 </div>
                 <div class="input-group">
                     <i data-feather="phone"></i>
-                    <input type="text" name="" id="" placeholder="Nomor HP" required>
+                    <input type="text" name="phone" id="contactPhone" placeholder="Nomor HP" required>
+                </div>
+                <div class="input-group">
+                    <i data-feather="message-circle"></i>
+                    <textarea name="pesan" id="contactPesan" cols="100%" rows="5" placeholder="Pesan Anda" required></textarea>
                 </div>
                 <button type="submit" class="btn">Kirim Pesan</button>
             </form>
@@ -312,7 +251,31 @@
 
     <!-- Javascript -->
     <script src="JS/script.js"></script>
-    
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            function sendToWhatsApp(event) {
+                event.preventDefault();
+
+                const name = document.getElementById("contactName").value;
+                const email = document.getElementById("contactEmail").value;
+                const phone = document.getElementById("contactPhone").value;
+                const message = document.getElementById("contactPesan").value;
+
+                console.log("Name:", name);
+                console.log("Email:", email);
+                console.log("Phone:", phone);
+                console.log("Message:", message);
+
+                const whatsappMessage = `Nama: ${name}%0AEmail: ${email}%0ANomor HP: ${phone}%0APesan: ${message}`;
+
+                const whatsappUrl = `https://wa.me/6285219674120?text=${whatsappMessage}`;
+
+                window.open(whatsappUrl, '_blank');
+            }
+
+            window.sendToWhatsApp = sendToWhatsApp;
+        });
+</script>
 </body>
 
 </html>
