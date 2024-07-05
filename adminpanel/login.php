@@ -31,7 +31,7 @@
                             <div class="form-group py-2">
                                 <div class="input-field">
                                     <span class="far fa-user p-2"></span>
-                                    <input type="text" placeholder="Username or Email" name="username" id="username">
+                                    <input type="text" placeholder="Admin Username" name="username" id="username">
                                 </div>
                             </div>
                             <div class="form-group py-1 pb-2">
@@ -40,15 +40,7 @@
                                     <input type="password" placeholder="Enter your Password" name="password" id="password">
                                 </div>
                             </div>
-                            <div class="form-inline">
-                                <input type="checkbox" name="remember" id="remember">
-                                <label for="remember" class="text-muted">Remember me</label>
-                                <a href="/forgotpw.html" id="forgot" class="font-weight-bold">Forgot password?</a>
-                            </div>
                             <button class="btn btn-primary btn-block mt-3" type="submit" name="loginbtn">Login</button>
-                            <div class="text-center pt-4 text-muted">Don't have an account? <a href="/signup.html">Sign
-                                    up</a>
-                            </div>
                         </form>
                     </div>
                 </div>
@@ -65,7 +57,7 @@
                 $query = mysqli_query($con, "SELECT * FROM users WHERE username='$username'");
                 $countdata = mysqli_num_rows($query);
                 $data = mysqli_fetch_array($query);
-
+                
                 if($countdata > 0){
                     if (password_verify($password, $data['password'])) {
                         $_SESSION['username'] = $data['username'];

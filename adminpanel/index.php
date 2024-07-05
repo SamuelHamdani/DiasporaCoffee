@@ -4,6 +4,9 @@
 
     $queryProduct = mysqli_query($con, "SELECT * FROM produk");
     $jumlahProduk = mysqli_num_rows($queryProduct);
+
+    $queryPesanan = mysqli_query($con, "SELECT * FROM pesanan");
+    $jumlahPesanan = mysqli_num_rows($queryPesanan);
     ?>
 
 <!DOCTYPE html>
@@ -20,15 +23,24 @@
         .summary-produk {
             background-color: #0A6B4A;
             border-radius: 15px;
+            display: inline;
+        }
+
+        .summary-pesanan {
+            margin-left: 10px;
+            background-color: #088395;
+            border-radius: 15px;
+            display: inline;
         }
         a {
-            text-decoration: none;
             color: white;
 
         }
-        a:hover {
-            color: blue;
-            transition: ease 1s;
+
+        @media (max-width: 768px) {
+            .summary-pesanan {
+                margin-left: 0;
+            }
         }
     </style>
 </head>
@@ -48,13 +60,13 @@
 
         <div class="container mt-5">
             <div class="row">
-                <div class="col-lg-4 summary-produk p-3">
+                <div class="col-lg-4 col-md-6 col-12 mb-3 summary-produk p-3">
                     <div class="row">
                         <div class="col-6">
                         <i class="fa-solid fa-bars fa-7x text-black-50"></i>
                         </div>
                         <div class="col-6 text-white">
-                            <h3 class="fs-3">Product</h3>
+                            <h3 class="fs-3">Produk</h3>
                             <p class="fs-5">
                                 <?php 
                                     if ($jumlahProduk > 0) {
@@ -64,6 +76,25 @@
                                     }
                                 ?> Produk</p>
                             <p><a href="produk.php" >Lihat Detail</a></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-12 mb-3 summary-pesanan p-3">
+                    <div class="row">
+                        <div class="col-6">
+                        <i class="fa-solid fa-bars fa-7x text-black-50"></i>
+                        </div>
+                        <div class="col-6 text-white">
+                            <h3 class="fs-3">Pemesanan</h3>
+                            <p class="fs-5">
+                                <?php 
+                                    if ($jumlahPesanan > 0) {
+                                        echo $jumlahPesanan;
+                                    } else {
+                                        echo "<p>Tidak ada";
+                                    }
+                                ?> Pemesanan</p>
+                            <p><a href="pemesanan.php" >Lihat Detail</a></p>
                         </div>
                     </div>
                 </div>

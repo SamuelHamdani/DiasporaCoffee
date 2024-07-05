@@ -26,9 +26,9 @@
         <a href="#" class="navbar-logo">Diaspora <span>Coffee.</span></a>
 
         <div class="navbar-nav">
-            <a href="/index.html">Home</a>
-            <a href="/index.html#about">About</a>
-            <a href="/index.html#products">Product</a>
+            <a href="./main.php">Home</a>
+            <a href="./main.php#about">About</a>
+            <a href="./main.php#products">Product</a>
         </div>
 
         <div class="navbar-extra">
@@ -42,7 +42,6 @@
     <!-- Contact Section -->
     <section id="contact" class="contact">
         <h2><span>Kontak</span> Kami</h2>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quos, porro.</p>
 
         <div class="row">
             <iframe
