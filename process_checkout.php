@@ -1,6 +1,5 @@
 <?php
 // Pastikan koneksi database sudah terhubung
-include 'session.php';
 include 'koneksi.php';
 
 // Tangkap data dari form
@@ -36,6 +35,6 @@ $stmt->close();
 $con->close();
 
 // Arahkan pengguna ke halaman instruksi pembayaran
-header("Location: payment_instruction.php?order_id=$order_id");
+header("Location: payment_instruction.php?order_id=$order_id&total_harga=$total");
 exit();
 ?>

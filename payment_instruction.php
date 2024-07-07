@@ -1,7 +1,3 @@
-<?php
-include 'session.php';
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,10 +6,17 @@ include 'session.php';
     <title>Instruksi Pembayaran</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
+<style>
+    .total {
+        font-weight: bold;
+        font-size: 1.4rem;
+    }
+</style>
 <body>
     <?php
     // Mengambil order_id dari URL
     $order_id = isset($_GET['order_id']) ? $_GET['order_id'] : '';
+    $total_harga = $_GET['total_harga'] ?? 'Unknown';
     ?>
     <div class="container mt-5">
         <div class="card">
@@ -25,6 +28,7 @@ include 'session.php';
                 <p>Bank: BCA<br>No. Rekening: 4730767761<br>Atas Nama: Harry Erlangga Kusumah</p>
                 <p>Batas pembayaran dilakukan sampai hari ini di jam 23.59 WIB, lewat dari jam ini pesanan akan dibatalkan</p>
                 <p><span style="color:red;">REMINDER</span>: Jangan keluar dari halaman ini jika belum melakukan pembayaran</p>
+                <p class="total">Total Harga : Rp. <?php echo $total_harga; ?></p>
             </div>
         </div>
 
