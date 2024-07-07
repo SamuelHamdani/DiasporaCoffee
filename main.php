@@ -143,11 +143,6 @@ $queryProduk = mysqli_query($con, "SELECT id, nama, harga, foto, detail, stok FR
                                 <use href="img/feather-sprite.svg#shopping-cart" />
                             </svg>
                         </a>
-                        <a href="#" class="item-detail-button">
-                            <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <use href="img/feather-sprite.svg#eye" />
-                            </svg>
-                        </a>
                     </div>
                     <div class="product-image">
                         <img :src="`image/${item.foto}`" :alt="item.nama">
@@ -211,31 +206,6 @@ $queryProduk = mysqli_query($con, "SELECT id, nama, harga, foto, detail, stok FR
             <p>Created by <a href="">Samuel Hamdani</a>. &copy 2024</p>
         </div>
     </footer>
-
-    <!-- Modal Box Item Detail-->
-    <div class="modal" id="item-detail-modal">
-        <div class="modal-container">
-            <a href="#" class="close-icon"><i data-feather="x"></i></a>
-            <div class="modal-content">
-                <img src="img/products/product.jpg" alt="Product 1">
-                <div class="product-content">
-                    <h3>Product 1</h3>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima, deleniti fugit soluta sunt quod aliquid, ex repellat illo, doloribus dolorum rem ipsum veniam. Sed, hic.</p>
-                    <div class="product-stars">
-                        <i data-feather="star" class="star-full"></i>
-                        <i data-feather="star" class="star-full"></i>
-                        <i data-feather="star" class="star-full"></i>
-                        <i data-feather="star" class="star-full"></i>
-                        <i data-feather="star"></i>
-                    </div>
-                    <div class="product-price">
-                        IDR 30K <span>IDR 55K</span>
-                    </div>
-                    <a href="#"><i data-feather="shopping-cart"></i>Add To Cart</a>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Feather Icons -->
     <script>
